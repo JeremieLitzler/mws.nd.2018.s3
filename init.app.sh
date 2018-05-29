@@ -4,7 +4,7 @@
 npm i -g serve
 npm i -g pump #Install Pump
 npm i -g compression #Install Compression
-npm i -g browser-sync
+#npm i -g browser-sync
 npm i -g babel-cli
 npm i -g gulp-cli #Install Gulp CLI
 npm i --save gulp -D #Install Gulp
