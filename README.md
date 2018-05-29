@@ -25,7 +25,7 @@ Pre-requisites :
 
 Then run the following commands:
 
-* first, install the dependencies: `bash init.app.sh`
+* first, install the dependencies: `npm install`
 * then, build the app in production mode: `gulp go-live`
 * navigate the built app: `cd build/`
 * finally, launch the app in your default browser (**Chrome is recommended ;)**): `serve -o`
