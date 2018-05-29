@@ -1,6 +1,8 @@
 # Udacity Nanodegree and Google Challenge "Mobile Web Specialist"
 
-## Project Overview: Stage 2
+-Code base for the Udacity's "Mobile Web Specialist Restaurant Reviews App: Stage 3" Project https://resto-reviews.puzzlout.com
+
+## Project Overview: Stage 3
 
 The API is available at the Udacity repository: https://github.com/udacity/mws-restaurant-stage-2
 Follow the installation instruction before launching the PWA.
