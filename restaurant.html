@@ -92,10 +92,40 @@
                 <button class="c-btn btn-default open-reviews-modal js-reviews-modal" title="Read reviews">
                     Read reviews
                 </button>
-                <button class="c-btn btn-default hide-gmaps" title="Hide the map">
-                    Hide Google Maps
-                </button>
             </div>
+            <article class="c-form new-review">
+                <h2>I have been there. Tell everyone how it was!</h2>
+                <div class="mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="5" aria-valuenow="5" aria-label="Tell everyone how it was!">
+                    <div class="mdc-slider__track-container">
+                        <div class="mdc-slider__track"></div>
+                    </div>
+                    <div class="mdc-slider__thumb-container">
+                        <div class="mdc-slider__pin">
+                            <span class="mdc-slider__pin-value-marker"></span>
+                        </div>
+                        <svg class="mdc-slider__thumb" width="21" height="21">
+                            <circle cx="10.5" cy="10.5" r="7.875"></circle>
+                        </svg>
+                        <div class="mdc-slider__focus-ring"></div>
+                    </div>
+                </div>
+                <div class="mdc-text-field">
+                    <input type="text" id="author" class="mdc-text-field__input" aria-controls="author-helper-text" aria-describedby="author-helper-text">
+                    <label for="author" class="mdc-floating-label">What do people call you?</label>
+                    <div class="mdc-line-ripple"></div>
+                </div>
+                <p id="author-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+                    Dark Vador
+                </p>
+                <div class="mdc-text-field">
+                    <input type="text" id="review-desc" class="mdc-text-field__input" aria-controls="review-desc-helper-text" aria-describedby="review-desc-helper-text">
+                    <label for="review-desc" class="mdc-floating-label">Go in details</label>
+                    <div class="mdc-line-ripple"></div>
+                </div>
+                <p id="review-desc-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+                    Give us what you thoughts, what can be improved, etc...
+                </p>
+            </article>
         </section>
         <section class="c-modal restaurant-hours-container-modal js-restaurant-hours-modal" id="restaurant-hours" role="dialog">
             <h2>
