@@ -75,26 +75,29 @@
             </div>
         </div>
         <section class="restaurant-details-container" id="restaurant-container">
-            <h2 id="restaurant-name">
-            </h2>
-            <p id="restaurant-cuisine">
-            </p>
-            <p id="restaurant-address">
-            </p>
-            <div class="restaurant-img-container">
+            <article>
+                <h2 id="restaurant-name">
+                </h2>
+                <p id="restaurant-cuisine">
+                </p>
+                <p id="restaurant-address">
+                </p>
+            </article>
+            <article class="restaurant-img-container">
                 <img alt="Featured image of the restaurant" id="restaurant-img" class="lazyload restaurant-img">
                 </img>
-            </div>
-            <div id="restaurant-actions">
+            </article>
+            <article id="restaurant-actions">
                 <button class="c-btn btn-default btn-resto-hours open-hours-modal js-restaurant-hours-modal" title="View opening hours">
                     View opening hours
                 </button>
                 <button class="c-btn btn-default open-reviews-modal js-reviews-modal" title="Read reviews">
                     Read reviews
                 </button>
-            </div>
+            </article>
             <article class="c-form new-review">
-                <h2>I have been there. Tell everyone how it was!</h2>
+                <h2 class="c-form-title">Been there?
+                    <br/> Tell everyone how it was!</h2>
                 <div class="mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="5" aria-valuenow="5" aria-label="Tell everyone how it was!">
                     <div class="mdc-slider__track-container">
                         <div class="mdc-slider__track"></div>
@@ -110,21 +113,23 @@
                     </div>
                 </div>
                 <div class="mdc-text-field">
-                    <input type="text" id="author" class="mdc-text-field__input" aria-controls="author-helper-text" aria-describedby="author-helper-text">
-                    <label for="author" class="mdc-floating-label">What do people call you?</label>
+                    <label for="author">What do people call you?</label>
+                    <input type="text" id="author" class="mdc-text-field__input" aria-controls="author-helper-text" aria-describedby="author-helper-text" placeholder="Dark Vador">
                     <div class="mdc-line-ripple"></div>
                 </div>
                 <p id="author-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
                     Dark Vador
                 </p>
                 <div class="mdc-text-field">
-                    <input type="text" id="review-desc" class="mdc-text-field__input" aria-controls="review-desc-helper-text" aria-describedby="review-desc-helper-text">
-                    <label for="review-desc" class="mdc-floating-label">Go in details</label>
-                    <div class="mdc-line-ripple"></div>
+                    <label for="review-desc">Your review</label>
+                    <textarea type="text" id="review-desc" class="mdc-text-field__input" aria-controls="review-desc-helper-text" aria-describedby="review-desc-helper-text" placeholder="Give us what you thoughts, what can be improved, etc..."></textarea>
                 </div>
                 <p id="review-desc-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
                     Give us what you thoughts, what can be improved, etc...
                 </p>
+                <button class="c-btn btn-default js-save-review" title="Save review">
+                    Save review
+                </button>
             </article>
         </section>
         <section class="c-modal restaurant-hours-container-modal js-restaurant-hours-modal" id="restaurant-hours" role="dialog">

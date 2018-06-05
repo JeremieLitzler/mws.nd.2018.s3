@@ -940,3 +940,50 @@ select option:checked {
 }
 
 /* Form review */
+
+/* Form component */
+
+.c-form {
+    text-align: center;
+    width: 100vh;
+}
+
+.mdc-text-field input,
+.mdc-text-field textarea {
+    width: 80vw;
+    height: 30px;
+    margin: 0 auto;
+    border: 0;
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 8px;
+}
+
+.mdc-text-field textarea {
+    height: 60px;
+}
+
+.mdc-text-field input:focus,
+.mdc-text-field textarea:focus {
+    border-bottom: 2px solid var(--brand-color);
+    margin-top: 8px;
+}
+
+.mdc-text-field textarea {
+    resize: vertical;
+    overflow: auto;
+}
+
+.mdc-text-field textarea:focus {
+    height: 20vh;
+}
+
+.mdc-text-field input,
+.mdc-text-field label {
+    display: block;
+}
+
+.mdc-text-field-helper-text {
+    display: none;
+}
+
+/* App specific styles */
