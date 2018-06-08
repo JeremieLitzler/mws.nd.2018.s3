@@ -37,3 +37,19 @@ function imageUrlForRestaurant(
   const imgFolderPath = "./img/";
   return `${imgFolderPath}${restaurant.id}-${imgWidth}w.jpg`;
 }
+
+/**
+ * Transform a obj into an array of objects
+ * Credits: https://stackoverflow.com/a/2735133
+ * @param {Object} obj
+ */
+function toArray(obj) {
+  //ES6 equivalent: [...obj]
+
+  let array = [];
+  // iterate backwards ensuring that length is an UInt32
+  for (let i = obj.length >>> 0; i--; ) {
+    array[i] = obj[i];
+  }
+  return array;
+}
