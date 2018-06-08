@@ -239,6 +239,7 @@ gulp.task("live-optim-js-index-page", callback => {
  */
 let jsFilesRestaurantPage = [
   "./js/db/fetch.restaurant.byid.js",
+  "./js/builders/slider.js",
   "./js/restaurant_info.js"
 ];
 const finalJsFilesRestaurantPage = [...jsCommonFiles, ...jsFilesRestaurantPage];
