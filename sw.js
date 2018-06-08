@@ -30,7 +30,7 @@ workbox.clientsClaim();
  */
 workbox.routing.registerRoute(
   /.*\.(?:js|html|css|json)/,
-  workbox.strategies.cacheFirst({ cacheName: workbox.core.cacheNames.precache })
+  workbox.strategies.cacheFirst({ cacheName: "rr-precache" })
 );
 
 /**
@@ -45,7 +45,7 @@ workbox.routing.registerRoute(
  */
 workbox.routing.registerRoute(
   /.*\.(?:png|jpe?g|svg|gif)/,
-  workbox.strategies.cacheFirst({ cacheName: "img-cache" })
+  workbox.strategies.cacheFirst({ cacheName: "rr-img-cache" })
 );
 
 /**
@@ -79,8 +79,9 @@ workbox.routing.registerRoute(
  */
 workbox.routing.registerRoute(
   /.*googleapis.com\/maps\/api\/staticmap.*$/,
-  workbox.strategies.staleWhileRevalidate({ cacheName: "staticmaps-cache" })
+  workbox.strategies.staleWhileRevalidate({ cacheName: "rr-staticmaps-cache" })
 );
-workbox.routing.registerNavigationRoute("/index.html");
+workbox.routing.registerNavigationRoute("./index.html");
+workbox.routing.registerNavigationRoute("./restaurant.html");
 
 workbox.precaching.precacheAndRoute([]);
