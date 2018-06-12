@@ -199,7 +199,7 @@ footer {
   display: inline-block;
 }
 
-.c-sw-status > span {
+.c-sw-status>span {
   width: 20px;
   height: 20px;
   border-radius: 10px;
@@ -405,8 +405,7 @@ p.c-emphasis {
 
 @media screen and (min-width: 650px) {
   .row-default {
-    padding: calc(var(--default-pad) / 2) 0 calc(var(--default-pad) / 2)
-      calc(var(--default-pad) / 2);
+    padding: calc(var(--default-pad) / 2) 0 calc(var(--default-pad) / 2) calc(var(--default-pad) / 2);
   }
 }
 
@@ -462,7 +461,7 @@ p.c-emphasis {
   z-index: var(--img-ph-layer);
 }
 
-.c-img-ph + img {
+.c-img-ph+img {
   z-index: var(--img-layer);
 }
 
@@ -597,7 +596,7 @@ nav h1 a {
   margin: 5rem;
 }
 
-.map-offline-placeholder > * {
+.map-offline-placeholder>* {
   text-align: center;
   /* top: 30vmin; */
 }
@@ -750,7 +749,7 @@ select option:checked {
 
 /* Add a slash symbol (/) before/behind each list item */
 
-.breadcrumb li + li:before {
+.breadcrumb li+li:before {
   padding: 8px;
   color: var(--text-light);
   content: "/\00a0";
@@ -805,20 +804,8 @@ select option:checked {
 }
 
 @media screen and (min-width: 650px) {
-  .resto-page-container {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: auto auto auto;
-  }
-  .resto-page-container .map-container {
-    grid-row: 1 / -1;
-    grid-column: 6 / -1;
-  }
   .restaurant-details-container {
-    grid-column: 1 / 6;
-  }
-  .map-container > #map {
-    height: 100%;
+    display: flex;
   }
 }
 
@@ -851,7 +838,7 @@ select option:checked {
     position: relative;
     text-align: center;
   }
-  table > tr {
+  table>tr {
     margin: var(--default-y-mg) auto;
   }
 }
@@ -896,8 +883,7 @@ select option:checked {
 }
 
 .reviews-container-modal li {
-  margin: calc(var(--default-y-mg) * 2) calc(var(--default-x-mg) * 2) 0
-    calc(var(--default-x-mg) * 2);
+  margin: calc(var(--default-y-mg) * 2) calc(var(--default-x-mg) * 2) 0 calc(var(--default-x-mg) * 2);
   background-color: var(--c-bg-row-default);
   border: 1px solid var(--c-bd-color-row-default);
   padding: calc(var(--default-pad) * 2);
@@ -947,7 +933,13 @@ select option:checked {
 
 .c-form {
   text-align: center;
-  width: 100vh;
+  width: 100vw;
+}
+
+@media screen and (min-width: 650px) {
+  .new-review {
+    margin-right: 5vw;
+  }
 }
 
 .mdc-slider__track-container {
@@ -963,9 +955,25 @@ select option:checked {
   border: 1px solid #aaa;
 }
 
+.mdc-text-field-helper-text {
+  font-size: smaller;
+  color: #aaa;
+  text-align: left;
+  width: 80vw;
+  margin: -1em auto 1em;
+}
+
+@media screen and (min-width: 650px) {
+  .mdc-text-field,
+  .mdc-slider,
+  .mdc-text-field-helper-text {
+    width: initial;
+  }
+}
+
 .mdc-text-field input,
 .mdc-text-field textarea {
-  width: 80vw;
+  width: 100%;
   height: 30px;
   margin: 0 auto;
   border: 0;
@@ -1002,16 +1010,6 @@ select option:checked {
   text-align: left;
 }
 
-p.mdc-text-field-helper-text {
-  font-size: smaller;
-  color: #aaa;
-  text-align: left;
-  width: 80vw;
-  padding-left: 2rem;
-  margin-bottom: 1rem;
-  margin-top: -1em;
-}
-
 .mdc-slider__track-marker-container {
   display: inline-flex;
 }
@@ -1041,6 +1039,10 @@ p.mdc-text-field-helper-text {
   box-shadow: var(--shadow-dark);
   border: 1px solid var(--brand-color);
   border-radius: 99px;
+}
+
+.new-review button {
+  margin-bottom: calc(var(--default-y-mg) * 5);
 }
 
 /* App specific styles */

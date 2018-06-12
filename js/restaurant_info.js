@@ -51,7 +51,6 @@ class RestaurantPage {
     const restaurantContainer = document.querySelector(
       ".restaurant-details-container"
     );
-    restaurantContainer.style.display = "block";
     const name = document.getElementById("restaurant-name");
     name.innerHTML = `At ${this.restaurant.name}`;
     const cuisine = document.getElementById("restaurant-cuisine");
