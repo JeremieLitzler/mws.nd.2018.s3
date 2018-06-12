@@ -28,14 +28,15 @@ trackMarker.appendChild(star);*/
 for (let index = 0; index < nbOfMarkers; index++) {
   const currentRating = index + 1;
   const titleLabel = `Select rating of ${currentRating}`;
-  const ratingValueAnchor = document.createElement("a");
-  ratingValueAnchor.innerText = currentRating;
-  ratingValueAnchor.title = titleLabel;
-  ratingValueAnchor.href = "#";
-  ratingValueAnchor.setAttribute("aria-label", titleLabel);
+  const ratingValueSpan = document.createElement("span");
+  ratingValueSpan.innerText = currentRating;
+  ratingValueSpan.title = titleLabel;
+  ratingValueSpan.href = "#";
+  ratingValueSpan.tabIndex = 0;
+  ratingValueSpan.setAttribute("aria-label", titleLabel);
 
   const currentTrackMarker = trackMarker.cloneNode();
-  currentTrackMarker.appendChild(ratingValueAnchor);
+  currentTrackMarker.appendChild(ratingValueSpan);
   trackContainer.appendChild(currentTrackMarker);
   console.log(`Added marker ${index}`);
 }

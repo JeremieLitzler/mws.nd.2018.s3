@@ -99,7 +99,8 @@
                 <h2 class="c-form-title">Been there?
                     <br/> Tell everyone how it was!</h2>
                 <div class="mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="5" aria-valuenow="5" aria-label="Tell everyone how it was!">
-                    <div class="mdc-slider__track-container">
+                    <label for="rating">Your rating</label>
+                    <div id="rating" class="mdc-slider__track-container" aria-controls="rating-helper-text" aria-describedby="rating-helper-text">
                         <svg style="display: none;">
                             <symbol id="star" viewBox="0 0 98 92">
                                 <title>star</title>
@@ -108,13 +109,16 @@
                         <div class="mdc-slider__track"></div>
                     </div>
                 </div>
+                <p id="rating-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
+                    From 1 to 5, how much would you recommend this restaurant?
+                </p>
                 <div class="mdc-text-field">
-                    <label for="author">What do people call you?</label>
+                    <label for="author">Your name</label>
                     <input type="text" id="author" class="mdc-text-field__input" aria-controls="author-helper-text" aria-describedby="author-helper-text" placeholder="Dark Vador">
                     <div class="mdc-line-ripple"></div>
                 </div>
                 <p id="author-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
-                    This is your first name
+                    What do people call you?
                 </p>
                 <div class="mdc-text-field">
                     <label for="review-desc">Your review</label>
