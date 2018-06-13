@@ -953,6 +953,7 @@ select option:checked {
   padding: 8px 8px 0 8px;
   border-radius: 4px;
   border: 1px solid #aaa;
+  background-color: white;
 }
 
 .mdc-text-field-helper-text {
@@ -961,6 +962,10 @@ select option:checked {
   text-align: left;
   width: 80vw;
   margin: -1em auto 1em;
+}
+
+p.mdc-text-field-helper-text {
+  text-align: left;
 }
 
 @media screen and (min-width: 650px) {
