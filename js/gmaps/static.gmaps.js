@@ -48,7 +48,7 @@ class StaticMapGenerator {
 
     //console.log("ratio", ratio);
     const calculatedHeight = parseInt(
-      maxWidth * (window.innerHeight * ratio) / window.innerWidth
+      (maxWidth * (window.innerHeight * ratio)) / window.innerWidth
     );
 
     //console.log(calculatedHeight);
@@ -102,18 +102,20 @@ class StaticMapGenerator {
     return apiUrl;
   }
   getApiUrlForRestaurant(restaurant) {
-    this.defaultZoom = 16;
+    this.defaultZoom = 15;
     if (this.doesWindowWidthExceedFreePlan()) {
       this.imageHeight = this.getImageHeightInPx(
-        StaticMapGenerator.widthHeightRatioWide
+        StaticMapGenerator.widthHeightRatioNarrow,
+        true
       );
       this.imageScale = 2;
     }
     if (this.isWindowWidthUnderTabletBreakPoint()) {
       this.imageWidth = window.innerWidth;
-      this.imageHeight = parseInt(
-        this.imageWidth * StaticMapGenerator.widthHeightRatioNarrow
+      this.imageHeight = this.getImageHeightInPx(
+        StaticMapGenerator.widthHeightRatioNarrow
       );
+      this.defaultZoom = 16;
     }
     const markersStr = this.buildMarkers([restaurant]);
     const apiUrl = `${
