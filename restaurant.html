@@ -101,11 +101,6 @@
                 <div class="mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="5" aria-valuenow="5" aria-label="Tell everyone how it was!">
                     <label for="rating">Your rating</label>
                     <div id="rating" class="mdc-slider__track-container" aria-controls="rating-helper-text" aria-describedby="rating-helper-text">
-                        <svg style="display: none;">
-                            <symbol id="star" viewBox="0 0 98 92">
-                                <title>star</title>
-                                <path stroke='#000' stroke-width='5' d='M49 73.5L22.55 87.406l5.05-29.453-21.398-20.86 29.573-4.296L49 6l13.225 26.797 29.573 4.297-21.4 20.86 5.052 29.452z' fill-rule='evenodd' />
-                        </svg>
                         <div class="mdc-slider__track"></div>
                     </div>
                 </div>
@@ -114,15 +109,16 @@
                 </p>
                 <div class="mdc-text-field">
                     <label for="author">Your name</label>
-                    <input type="text" id="author" class="mdc-text-field__input" aria-controls="author-helper-text" aria-describedby="author-helper-text" placeholder="Dark Vador">
+                    <input type="text" id="author" class="mdc-text-field__input" aria-controls="author-helper-text" aria-describedby="author-helper-text" placeholder="Dark Vador" autocomplete="off">
                     <div class="mdc-line-ripple"></div>
                 </div>
                 <p id="author-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
-                    What do people call you?
+                    Tell us What do people call you.
                 </p>
                 <div class="mdc-text-field">
                     <label for="review-desc">Your review</label>
                     <textarea type="text" id="review-desc" class="mdc-text-field__input" aria-controls="review-desc-helper-text" aria-describedby="review-desc-helper-text" placeholder="Give everyone a taste of it..."></textarea>
+                    <div class="mdc-line-ripple"></div>
                 </div>
                 <p id="review-desc-helper-text" class="mdc-text-field-helper-text" aria-hidden="true">
                     Give us your thoughts, what can be improved, etc...

@@ -952,8 +952,11 @@ select option:checked {
   margin: 8px auto 16px auto;
   padding: 8px 8px 0 8px;
   border-radius: 4px;
-  border: 1px solid #aaa;
   background-color: white;
+}
+
+.mdc-slider {
+  padding-bottom: 0.1em
 }
 
 .mdc-text-field-helper-text {
@@ -961,7 +964,18 @@ select option:checked {
   color: #aaa;
   text-align: left;
   width: 80vw;
-  margin: -1em auto 1em;
+  margin: auto;
+  margin-top: -1em;
+  margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 650px) {
+  .mdc-text-field-helper-text {
+    margin-right: auto;
+    margin-left: 0.5rem;
+    margin-top: -1em;
+    margin-bottom: 1rem;
+  }
 }
 
 p.mdc-text-field-helper-text {
@@ -982,13 +996,11 @@ p.mdc-text-field-helper-text {
   height: 30px;
   margin: 0 auto;
   border: 0;
-  border-bottom: 1px solid #aaa;
   margin-bottom: -1px;
 }
 
 .mdc-text-field input:focus,
 .mdc-text-field textarea:focus {
-  border-bottom: 2px solid var(--brand-color);
   margin-top: 8px;
 }
 
@@ -1036,7 +1048,7 @@ p.mdc-text-field-helper-text {
 
 .mdc-slider__track-marker span:focus,
 .mdc-slider__track-marker span:active,
-.mdc-slider__track-marker span.selected {
+.mdc-slider__track-marker span.selected-rating {
   background-color: var(--bg-dark);
   color: var(--text-light);
   text-decoration: none;
@@ -1044,6 +1056,17 @@ p.mdc-text-field-helper-text {
   box-shadow: var(--shadow-dark);
   border: 1px solid var(--brand-color);
   border-radius: 99px;
+}
+
+.mdc-line-ripple {
+  border-bottom: 1px solid #aaa;
+  position: relative;
+  top: 1px;
+}
+
+input:focus+.mdc-line-ripple,
+textarea:focus+.mdc-line-ripple {
+  border-bottom: 2px solid var(--brand-color);
 }
 
 .new-review button {

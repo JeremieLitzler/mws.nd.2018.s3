@@ -29,6 +29,7 @@ for (let index = 0; index < nbOfMarkers; index++) {
   const currentRating = index + 1;
   const titleLabel = `Select rating of ${currentRating}`;
   const ratingValueSpan = document.createElement("span");
+  ratingValueSpan.className = "rating";
   ratingValueSpan.innerText = currentRating;
   ratingValueSpan.title = titleLabel;
   ratingValueSpan.href = "#";
