@@ -199,7 +199,7 @@ footer {
   display: inline-block;
 }
 
-.c-sw-status > span {
+.c-sw-status>span {
   width: 20px;
   height: 20px;
   border-radius: 10px;
@@ -405,8 +405,7 @@ p.c-emphasis {
 
 @media screen and (min-width: 650px) {
   .row-default {
-    padding: calc(var(--default-pad) / 2) 0 calc(var(--default-pad) / 2)
-      calc(var(--default-pad) / 2);
+    padding: calc(var(--default-pad) / 2) 0 calc(var(--default-pad) / 2) calc(var(--default-pad) / 2);
   }
 }
 
@@ -462,7 +461,7 @@ p.c-emphasis {
   z-index: var(--img-ph-layer);
 }
 
-.c-img-ph + img {
+.c-img-ph+img {
   z-index: var(--img-layer);
 }
 
@@ -599,7 +598,7 @@ nav h1 a {
   margin: 5rem;
 }
 
-.map-offline-placeholder > * {
+.map-offline-placeholder>* {
   text-align: center;
   /* top: 30vmin; */
 }
@@ -752,7 +751,7 @@ select option:checked {
 
 /* Add a slash symbol (/) before/behind each list item */
 
-.breadcrumb li + li:before {
+.breadcrumb li+li:before {
   padding: 8px;
   color: var(--text-light);
   content: "/\00a0";
@@ -841,7 +840,7 @@ select option:checked {
     position: relative;
     text-align: center;
   }
-  table > tr {
+  table>tr {
     margin: var(--default-y-mg) auto;
   }
 }
@@ -886,8 +885,7 @@ select option:checked {
 }
 
 .reviews-container-modal li {
-  margin: calc(var(--default-y-mg) * 2) calc(var(--default-x-mg) * 2) 0
-    calc(var(--default-x-mg) * 2);
+  margin: calc(var(--default-y-mg) * 2) calc(var(--default-x-mg) * 2) 0 calc(var(--default-x-mg) * 2);
   background-color: var(--c-bg-row-default);
   border: 1px solid var(--c-bd-color-row-default);
   padding: calc(var(--default-pad) * 2);
@@ -1068,9 +1066,27 @@ p.mdc-text-field-helper-text {
   top: 1px;
 }
 
-input:focus + .mdc-line-ripple,
-textarea:focus + .mdc-line-ripple {
+input:focus+.mdc-line-ripple,
+textarea:focus+.mdc-line-ripple {
   border-bottom: 2px solid var(--brand-color);
+}
+
+.is-ko {
+  border: 2px solid #e40e0e;
+}
+
+.is-ok {
+  border: 2px solid #3fc73f;
+}
+
+.validation-ko {
+  color: #e40e0e;
+  font-weight: bolder;
+}
+
+.validation-ok {
+  color: #3fc73f;
+  font-weight: bolder;
 }
 
 .new-review button {

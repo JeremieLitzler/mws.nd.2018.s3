@@ -239,8 +239,14 @@ gulp.task("live-optim-js-index-page", callback => {
  */
 let jsFilesRestaurantPage = [
   "./js/db/fetch.restaurant.byid.js",
+  "./js/classes/RatingValidator.js",
+  "./js/classes/AuthorValidator.js",
+  "./js/classes/ReviewDescValidator.js",
+  "./js/classes/IssueTracker.js",
+  "./js/classes/Review.js",
+  "./js/classes/ReviewSaver.js",
+  "./js/classes/FormValidation.js",
   "./js/builders/slider.js",
-  "./js/handlers/validation.js",
   "./js/handlers/select.rating.js",
   "./js/handlers/post.review.js",
   "./js/restaurant_info.js"
