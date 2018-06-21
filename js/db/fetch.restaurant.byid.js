@@ -59,3 +59,21 @@ function fetchRestaurantFromApi(id) {
       return "Visit the home page!";
     });
 }
+
+function saveToApi(restaurant) {
+  const DATABASE_URL = `http://localhost:1337/restaurants/${restaurant.id}`;
+  const fetchParams = {
+    method: "POST",
+    "content-type": "application/json",
+    body: JSON.stringify(restaurant)
+  };
+  fetch(DATABASE_URL, fetchParams)
+    .then(result => {
+      console.log("API updated data");
+      return true;
+    })
+    .catch(err => {
+      console.error(err);
+      return false;
+    });
+}
