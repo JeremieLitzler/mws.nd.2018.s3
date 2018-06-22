@@ -28,8 +28,13 @@ class AuthorValidator {
       return false;
     }
 
-    if (this.reviewAuthor.value === "") {
-      this.PrintNotSetMessage();
+    if (IsStringEmpty(this.reviewAuthor.value)) {
+      this.PrintNotSetMessage("The author is missing!");
+      return false;
+    }
+
+    if (IsStringOnlyWhiteSpace(this.reviewAuthor.value)) {
+      this.PrintNotSetMessage("Nice try... Do type something!");
       return false;
     }
 
@@ -52,9 +57,10 @@ class AuthorValidator {
 
   /**
    * Print out the validation message when input is empty
+   * @param {string} message
    */
-  PrintNotSetMessage() {
-    this.validationMessageElement.innerHTML = "The author is missing!";
+  PrintNotSetMessage(message) {
+    this.validationMessageElement.innerHTML = message;
     this.validationMessageElement.classList.add("validation-ko");
     this.inputContainer.appendChild(this.validationMessageElement);
     this.inputContainer.classList.remove("is-ok");

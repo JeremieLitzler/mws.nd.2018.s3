@@ -53,3 +53,24 @@ function toArray(obj) {
   }
   return array;
 }
+
+/**
+ * Check if the string is empty
+ * @param {string} str
+ */
+function IsStringEmpty(str) {
+  const result = str === "";
+  return result;
+}
+/**
+ * Check if the string only white space.
+ * @param {string} str
+ */
+function IsStringOnlyWhiteSpace(str) {
+  const strTrimmed = str.trim();
+  if (strTrimmed.length === 0) {
+    return true;
+  }
+
+  return false;
+}

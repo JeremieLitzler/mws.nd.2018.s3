@@ -28,8 +28,14 @@ class ReviewDescValidator {
       return false;
     }
 
-    if (this.reviewDesc.value === "") {
-      this.PrintNotSetMessage();
+    if (IsStringEmpty(this.reviewDesc.value)) {
+      this.PrintNotSetMessage(
+        "You have not written any review. Please give us some food for thought."
+      );
+      return false;
+    }
+    if (IsStringOnlyWhiteSpace(this.reviewDesc.value)) {
+      this.PrintNotSetMessage("Nice try... Do type something!");
       return false;
     }
 
@@ -50,9 +56,8 @@ class ReviewDescValidator {
   /**
    * Print out the validation message when input is empty
    */
-  PrintNotSetMessage() {
-    this.validationMessageElement.innerHTML =
-      "You have not written any review. Please give us some food for thought.";
+  PrintNotSetMessage(message) {
+    this.validationMessageElement.innerHTML = message;
     this.validationMessageElement.classList.add("validation-ko");
     this.inputContainer.appendChild(this.validationMessageElement);
     this.inputContainer.classList.remove("is-ok");
