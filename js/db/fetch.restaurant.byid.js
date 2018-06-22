@@ -67,13 +67,13 @@ function saveToApi(restaurant) {
     "content-type": "application/json",
     body: JSON.stringify(restaurant)
   };
-  fetch(DATABASE_URL, fetchParams)
+  return fetch(DATABASE_URL, fetchParams)
     .then(result => {
-      console.log("API updated data");
+      if (DEBUG) console.log("API updated data");
       return true;
     })
     .catch(err => {
-      console.error(err);
+      console.error("Unable to save to API. Reason: ", err);
       return false;
     });
 }

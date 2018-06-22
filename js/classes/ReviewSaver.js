@@ -7,7 +7,7 @@ class ReviewSaver {
   }
   Save() {
     if (this.ratingElem != null) {
-      this.reviewInstance.ratingValue = this.ratingElem.innerHTML;
+      this.reviewInstance.ratingValue = this.ratingElem.textContent;
     }
     this.reviewInstance.author = this.authorElem.value;
     this.reviewInstance.reviewDesc = this.reviewDescElem.value;
@@ -16,12 +16,19 @@ class ReviewSaver {
     console.log(this.reviewInstance);
 
     this.InitializeSubmitFeedback();
-    const isReviewSaved = this.PostToApi()
+    this.PostToApi()
       .then(result => {
+        //display success message
+        if (result != null) {
+          new RestaurantPage().fillReviewsHTML(result.restaurant.reviews);
+          this.DisplaySubmissionEndNotification(result);
+          return;
+        }
         console.log(result);
       })
       .catch(err => {
-        console.error(err);
+        //any other error not handled
+        console.error("Check the error stack", err);
       });
   }
   /**
@@ -29,9 +36,26 @@ class ReviewSaver {
    */
   InitializeSubmitFeedback() {
     const formElement = document.querySelector(".new-review");
-    const submissionFeedBackElement = document.createElement("p");
-    submissionFeedBackElement.className = "validation is-processing";
-    submissionFeedBackElement.innerHTML = "Saving your review...";
+    const newSubmissionFeedBackElement = document.createElement("p");
+
+    newSubmissionFeedBackElement.className = "submit-result is-processing";
+    newSubmissionFeedBackElement.textContent = "Saving your review...";
+    formElement.appendChild(newSubmissionFeedBackElement);
+  }
+  /**
+   * Display the feedback after review is saved, independant of the status.
+   * @param {responseObject} result
+   */
+  DisplaySubmissionEndNotification(result) {
+    const submissionFeedbackElement = document.querySelector(".submit-result");
+    let feedbackMessage = `Thank you for reviewing ${result.restaurant.name}.`;
+    if (!result.status) {
+      feedbackMessage +=
+        " Since you are offline, your review would be saved once you connect your device to a Wifi or mobile network.";
+    }
+    if (submissionFeedbackElement != null) {
+      submissionFeedbackElement.textContent = feedbackMessage;
+    }
   }
   /**
    *
@@ -39,15 +63,10 @@ class ReviewSaver {
   PostToApi() {
     // save review in idb cache
     this.SaveReviewInSpecificCache();
-    //read the restaurant object
     const restaurantId = new RestaurantPage().getRestaurantId();
-    fetchRestaurant(restaurantId).then(restaurant => {
-      //add the review to the list of reviews
-      console.log(restaurant.reviews);
+    return fetchRestaurant(restaurantId).then(restaurant => {
       this.AddReviewToRestaurantObj(restaurant);
-      console.log(restaurant.reviews);
-      //send to api
-      return saveToApi(restaurant);
+      return this.ProcessApiResponse(restaurant);
     });
   }
   AddReviewToRestaurantObj(restaurant) {
@@ -69,6 +88,34 @@ class ReviewSaver {
       rating: this.reviewInstance.ratingValue,
       comments: this.reviewInstance.reviewDesc,
       date: new Date(Date.now()).toDateString()
+    };
+  }
+  /**
+   * Handle the reply of the API.
+   * If the API call failed, we still have the complete restaurant object.
+   * True means we can tell that the user that the review was saved.
+   * False means we will save the review using background sync.
+   * @param {restaurant} restaurant
+   */
+  ProcessApiResponse(restaurant) {
+    return saveToApi(restaurant)
+      .then(apiResult => {
+        return this.BuildResponseObject(apiResult, restaurant);
+      })
+      .catch(err => {
+        console.error("Unhandled error. Check call stack", err);
+      });
+  }
+
+  /**
+   * Create the response following the api call.
+   * @param {boolean} apiResult
+   * @param {restaurant} restaurant
+   */
+  BuildResponseObject(apiResult, restaurant) {
+    return {
+      status: apiResult,
+      restaurant: restaurant
     };
   }
   SaveReviewInSpecificCache() {}
