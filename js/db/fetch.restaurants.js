@@ -9,8 +9,7 @@ const STATIC_DATA_URL = `${location.origin}/data/restaurants.json`;
  * Fetch the IDB database.
  */
 function fetchRestaurants() {
-  return idbKeyval
-    .keys()
+  return retrieveKeys()
     .then(idbKeys => {
       return fetchFullData(idbKeys);
     })
