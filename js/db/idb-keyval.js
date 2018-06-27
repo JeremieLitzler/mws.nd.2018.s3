@@ -72,12 +72,29 @@ var idbKeyval = (function(exports) {
       .then(() => keys);
   }
 
+  function getAll(store = getDefaultStore()) {
+    const items = [];
+    return store
+      ._withIDBStore("readonly", store => {
+        // This would be store.getAllKeys(), but it isn't supported by Edge or Safari.
+        // And openKeyCursor isn't supported by Safari.
+        (store.openKeyCursor || store.openCursor).call(
+          store
+        ).onsuccess = function() {
+          if (!this.result) return;
+          items.push(this.result);
+          this.result.continue();
+        };
+      })
+      .then(() => items);
+  }
   exports.Store = Store;
   exports.get = get;
   exports.set = set;
   exports.del = del;
   exports.clear = clear;
   exports.keys = keys;
+  exports.getAll = getAll;
 
   return exports;
 })({});
