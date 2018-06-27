@@ -7,7 +7,7 @@ maxMarkers = [...slider.attributes].find(attr => attr.name === "aria-valuemax")
   .value;
 
 let nbOfMarkers = maxMarkers - minMarkers;
-console.log("nbOfMarkers", nbOfMarkers);
+if (DEBUG) console.log("nbOfMarkers", nbOfMarkers);
 
 const sliderTrack = document.querySelector(".mdc-slider__track");
 const trackContainer = document.createElement("div");
@@ -39,6 +39,6 @@ for (let index = 0; index < nbOfMarkers; index++) {
   const currentTrackMarker = trackMarker.cloneNode();
   currentTrackMarker.appendChild(ratingValueSpan);
   trackContainer.appendChild(currentTrackMarker);
-  console.log(`Added marker ${index}`);
+  if (DEBUG) console.log(`Added marker ${index}`);
 }
 sliderTrack.appendChild(trackContainer);
