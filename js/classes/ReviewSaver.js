@@ -112,6 +112,9 @@ class ReviewSaver {
    */
   BuildResponseObject(apiResult, restaurant) {
     if (!apiResult) {
+      console.warn(
+        "The review wasn't save by the API... Caching it for background sync..."
+      );
       this.SaveReviewInSpecificCacheFor(restaurant);
     }
     return {
