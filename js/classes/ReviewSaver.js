@@ -61,8 +61,6 @@ class ReviewSaver {
    *
    */
   PostToApi() {
-    // save review in idb cache
-    this.SaveReviewInSpecificCache();
     const restaurantId = new RestaurantPage().getRestaurantId();
     return fetchRestaurant(restaurantId).then(restaurant => {
       this.AddReviewToRestaurantObj(restaurant);
@@ -113,10 +111,19 @@ class ReviewSaver {
    * @param {restaurant} restaurant
    */
   BuildResponseObject(apiResult, restaurant) {
+    if (!apiResult) {
+      this.SaveReviewInSpecificCacheFor(restaurant);
+    }
     return {
       status: apiResult,
       restaurant: restaurant
     };
   }
-  SaveReviewInSpecificCache() {}
+  /**
+   * Cache the review for a given restaurant
+   * @param {Restaurant} restaurant
+   */
+  SaveReviewInSpecificCacheFor(restaurant) {
+    cacheReview(restaurant, this.reviewInstance);
+  }
 }
