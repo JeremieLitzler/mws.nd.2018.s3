@@ -124,7 +124,7 @@ class StaticMapGenerator {
       this.imageWidth
     }x${this.imageHeight}&key=${STATIC_API_KEY}`;
 
-    console.log(apiUrl);
+    if (DEBUG) console.log(apiUrl);
     return apiUrl;
   }
 }

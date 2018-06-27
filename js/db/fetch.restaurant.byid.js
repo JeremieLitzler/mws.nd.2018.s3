@@ -32,7 +32,7 @@ function fetchRestaurantFromApi(id) {
     .then(function(response) {
       if (response.ok) {
         const jsonData = response.json();
-        console.log(jsonData);
+        if (DEBUG) console.log(jsonData);
         return jsonData;
       }
       if (DEBUG) console.log("Fetch failed response", response);
