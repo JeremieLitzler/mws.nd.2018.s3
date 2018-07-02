@@ -11,8 +11,17 @@ function setRestaurantAsFavorite(restaurant) {
 function unsetRestaurantAsFavorite(restaurant) {
   return idbKeyval.del(restaurant.id, favoritesDb);
 }
-function isRestaurantAFavorite(restaurant) {
-  return idbKeyval.get(restaurant.id, favoritesDb);
+function isRestaurantAFavorite(restaurantId) {
+  return idbKeyval
+    .get(restaurantId, favoritesDb)
+    .then(result => {
+      const response = { isFavorite: result, restaurantId: restaurantId };
+      return response;
+    })
+    .catch(err => {
+      if (DEBUG) console.error("Error in isRestaurantAFavorite", err);
+      return false;
+    });
 }
 function readAllFavoriteRestaurants() {
   return idbKeyval.getAll(favoritesDb);
