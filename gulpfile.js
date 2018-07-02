@@ -183,9 +183,13 @@ let uglify = require("gulp-uglify-es").default;
  */
 let jsCommonFiles = [
   "./js/db/idb-keyval.js", //Idb with promise library
-  "./js/lib/debug.js", //Idb with promise library
+  "./js/lib/debug.js",
   "./js/lib/helpers.js",
   "./js/db/cache.request.js",
+  "./js/db/cache.favorite.js",
+  "./js/handlers/set.favorite.js",
+  "./js/classes/FavoriteButton.js",
+  "./js/classes/FavoriteButtonHandler.js",
   "./js/app.js",
   "./js/lazysizes.min.js",
   "./js/gmaps/constants.js",
