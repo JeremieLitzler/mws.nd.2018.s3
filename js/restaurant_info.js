@@ -77,6 +77,8 @@ class RestaurantPage {
     // fill reviews
     this.fillReviewsHTML(this.restaurant.reviews);
 
+    new FavoriteButtonHandler().LoadCurrentState();
+
     return this;
   }
   /**
