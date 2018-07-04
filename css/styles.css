@@ -1093,4 +1093,35 @@ textarea:focus+.mdc-line-ripple {
   margin-bottom: calc(var(--default-y-mg) * 5);
 }
 
+/* Favorite button */
+
+.is-favorite {
+  background-color: transparent;
+  border: 2px solid var(--brand-color);
+  float: right;
+  min-width: 3.2em;
+  width: 3.2em;
+  height: 3.2em;
+  padding: initial;
+  border-radius: 100px;
+}
+
+.is-favorite:focus,
+.is-favorite:hover {
+  background-color: transparent;
+}
+
+.star svg,
+.unstar svg {
+  width: 2em;
+}
+
+.unstar svg {
+  fill: var(--bg-dark);
+}
+
+.star svg {
+  fill: #3fc73f;
+}
+
 /* App specific styles */
