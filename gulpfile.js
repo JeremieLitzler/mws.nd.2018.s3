@@ -63,7 +63,7 @@ gulp.task("copy-html", () => {
  */
 gulp.task("copy-icons", () => {
   gulp
-    .src(["./img/icons/*.svg", "./img/icons/*.png"])
+    .src(["./img/icons/**/*.svg", "./img/icons/*.png"])
     .pipe(gulp.dest("./build/img/icons"));
 });
 
@@ -100,7 +100,7 @@ gulp.task("copy-static-assets", [
 const $ = require("gulp-load-plugins")();
 gulp.task("optim-images", () => {
   return gulp
-    .src("img/*.{jpg,png}")
+    .src("img/*.{jpg,png,webp}")
     .pipe(
       $.responsive(
         {
