@@ -2,7 +2,7 @@
  * Database URL.
  * Change this to your server's.
  */
-const API_URL = `${API_ENDPOINT}/restaurants`;
+const API_URL = "http://localhost:1337/restaurants";
 const STATIC_DATA_URL = `${location.origin}/data/restaurants.json`;
 
 /**
