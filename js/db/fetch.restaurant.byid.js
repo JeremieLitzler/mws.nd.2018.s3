@@ -27,7 +27,7 @@ function fetchRestaurant(id) {
  * @param {int} id
  */
 function fetchRestaurantFromApi(id) {
-  const DATABASE_URL = `${API_ENDPOINT}/restaurants/${id}`;
+  const DATABASE_URL = `http://localhost:1337/restaurants/${id}`;
   fetch(DATABASE_URL)
     .then(function(response) {
       if (response.ok) {
@@ -61,7 +61,7 @@ function fetchRestaurantFromApi(id) {
 }
 
 function saveToApi(restaurant) {
-  const DATABASE_URL = `${API_ENDPOINT}/restaurants/${restaurant.id}`;
+  const DATABASE_URL = `http://localhost:1337/restaurants/${restaurant.id}`;
   const fetchParams = {
     method: "POST",
     "content-type": "application/json",
