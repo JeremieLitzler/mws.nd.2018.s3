@@ -23,7 +23,7 @@ workbox.setConfig({ debug: isDebuggingActive });
 // https://developers.google.com/web/tools/workbox/guides/configure-workbox
 workbox.core.setCacheNameDetails({
   prefix: "rr",
-  suffix: "v4"
+  suffix: "v7"
 });
 /**
  * See: https://developers.google.com/web/tools/workbox/modules/workbox-sw#skip_waiting_and_clients_claim
@@ -31,6 +31,31 @@ workbox.core.setCacheNameDetails({
 workbox.skipWaiting();
 workbox.clientsClaim();
 
+// Credits: https://github.com/GoogleChrome/workbox/issues/1407
+// clean up old SW caches
+let currentCacheNames = Object.assign(
+  { precacheTemp: workbox.core.cacheNames.precache + "-temp" },
+  workbox.core.cacheNames
+);
+
+// clean up old SW caches
+self.addEventListener("activate", function(event) {
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      let validCacheSet = new Set(Object.values(currentCacheNames));
+      return Promise.all(
+        cacheNames
+          .filter(function(cacheName) {
+            return !validCacheSet.has(cacheName);
+          })
+          .map(function(cacheName) {
+            //console.log("deleting cache", cacheName);
+            return caches.delete(cacheName);
+          })
+      );
+    })
+  );
+});
 // The precacheAndRoute method of the precaching module takes a precache
 // "manifest" (a list of file URLs with "revision hashes") to cache on service
 // worker installation. It also sets up a cache-first strategy for the
