@@ -19,35 +19,45 @@ if (workbox) {
  */
 workbox.setConfig({ debug: isDebuggingActive });
 
+// Custom Cache Names
+// https://developers.google.com/web/tools/workbox/guides/configure-workbox
+workbox.core.setCacheNameDetails({
+  prefix: "rr",
+  suffix: "v4"
+});
 /**
  * See: https://developers.google.com/web/tools/workbox/modules/workbox-sw#skip_waiting_and_clients_claim
  */
 workbox.skipWaiting();
 workbox.clientsClaim();
 
+// The precacheAndRoute method of the precaching module takes a precache
+// "manifest" (a list of file URLs with "revision hashes") to cache on service
+// worker installation. It also sets up a cache-first strategy for the
+// specified resources, serving them from the cache by default.
+// In addition to precaching, the precacheAndRoute method sets up an implicit
+// cache-first handler.
+workbox.precaching.precacheAndRoute(["./", "./restaurant.html"]);
+
 /**
  * Precache the static assets matching the regex
  */
 workbox.routing.registerRoute(
   /.*\.(?:js|html|css|json)/,
-  workbox.strategies.cacheFirst({ cacheName: "rr-precache" })
+  workbox.strategies.cacheFirst({ cacheName: "precache" })
 );
 
 /**
- * Fetch the Javascript and CSS files from the cache first, while making sure they are updated in the background for the next use.
+ * Whatever is not cached in the JS and CSS, fetch the files and cache them while making sure they are updated in the background for the next use.
  */
 workbox.routing.registerRoute(
   /\.(?:js|css)$/,
-  workbox.strategies.staleWhileRevalidate()
-);
-/**
- * Precache the images
- */
-workbox.routing.registerRoute(
-  /.*\.(?:png|jpe?g|svg|gif)/,
-  workbox.strategies.cacheFirst({ cacheName: "rr-img-cache" })
+  workbox.strategies.staleWhileRevalidate({ cacheName: "static-assets" })
 );
 
+/**
+ * Cache the images
+ */
 /**
  * Images are cached and used until it’s a week old, after which it’ll need updating
  */
@@ -58,12 +68,9 @@ const MAX_ENTRIES =
   10; //icons
 
 workbox.routing.registerRoute(
-  // Cache image files
-  /.*\.(?:png|jpg|jpeg|svg|gif)/,
-  // Use the cache if it's available
+  /.*\.(?:png|jpe?g|svg|gif|webp|svg)/,
   workbox.strategies.cacheFirst({
-    // Use a custom cache name
-    cacheName: "image-cache",
+    cacheName: "img-cache",
     plugins: [
       new workbox.expiration.Plugin({
         // Cache only 20 images
@@ -74,14 +81,34 @@ workbox.routing.registerRoute(
     ]
   })
 );
+
 /**
  * Cache the Google Static API images (to show them while offline)
  */
 workbox.routing.registerRoute(
   /.*googleapis.com\/maps\/api\/staticmap.*$/,
-  workbox.strategies.staleWhileRevalidate({ cacheName: "rr-staticmaps-cache" })
+  workbox.strategies.staleWhileRevalidate({ cacheName: "staticmaps-cache" })
 );
-workbox.routing.registerNavigationRoute("./index.html");
-workbox.routing.registerNavigationRoute("./restaurant.html");
 
-workbox.precaching.precacheAndRoute([]);
+// Make sure to register the restaurant detail URL with the GET parmeters using the "cacheFirst" strategy.
+// http://localhost:8887/restaurant.html?id=1
+workbox.routing.registerRoute(
+  new RegExp("restaurant.html(.*)"),
+  workbox.strategies.cacheFirst({
+    cacheName: "pages",
+    // Status 0 is the response you would get if you request a cross-origin
+    // resource and the server that you're requesting it from is not
+    // configured to serve cross-origin resources.
+    cacheableResponse: { statuses: [0, 200] }
+  })
+);
+workbox.routing.registerRoute(
+  new RegExp("index.html"),
+  workbox.strategies.cacheFirst({
+    cacheName: "pages",
+    // Status 0 is the response you would get if you request a cross-origin
+    // resource and the server that you're requesting it from is not
+    // configured to serve cross-origin resources.
+    cacheableResponse: { statuses: [0, 200] }
+  })
+);
