@@ -963,7 +963,7 @@ select option:checked {
 
 .mdc-text-field-helper-text {
   font-size: smaller;
-  color: #aaa;
+  color: #595959;
   text-align: left;
   width: 80vw;
   margin: auto;
