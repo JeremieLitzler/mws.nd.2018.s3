@@ -1,8 +1,11 @@
 class FavoriteButtonHandler {
-  BuildExtendedRestaurantObj(alreadyFavoriteResponse) {
+  GetFavoriteFlagValueAsBool(isFavoriteStr) {
+    return isFavoriteStr === "false" || !isFavoriteStr ? false : true;
+  }
+  BuildExtendedRestaurantObj(restaurant) {
     return {
-      isFavorite: alreadyFavoriteResponse.isFavorite,
-      restaurantPromise: fetchRestaurant(alreadyFavoriteResponse.restaurantId)
+      isFavorite: this.GetFavoriteFlagValueAsBool(restaurant.is_favorite),
+      restaurantObj: restaurant
     };
   }
   LoadCurrentState() {
@@ -21,29 +24,40 @@ class FavoriteButtonHandler {
   UpdateState(favoriteButtonElement) {
     const favoriteButton = new FavoriteButton(favoriteButtonElement);
     this.ReadCurrentState().then(response => {
-      if (!response.isFavorite) {
-        return response.restaurantPromise.then(restaurant => {
-          setRestaurantAsFavorite(restaurant);
-          favoriteButton.UpdateAsFavorite();
+      const newState = !response.isFavorite;
+      return setRestaurantFavoriteFlag(response.restaurantObj, newState)
+        .then(restaurant => {
+          this.ProcessApiResult(restaurant, favoriteButton);
+        })
+        .catch(err => {
+          console.error("In FavoriteButtonHandler.UpdateState => ", err);
+          return false;
         });
-      }
-
-      return response.restaurantPromise.then(restaurant => {
-        unsetRestaurantAsFavorite(restaurant);
-        favoriteButton.SetDefault();
-      });
     });
   }
   ReadCurrentState(favoriteButton) {
     if (this.favoriteButton == null) this.favoriteButton = favoriteButton;
 
     const restaurantId = new RestaurantPage().getRestaurantId();
-    return isRestaurantAFavorite(restaurantId)
-      .then(result => {
-        return this.BuildExtendedRestaurantObj(result);
+    return fetchRestaurant(restaurantId)
+      .then(restaurant => {
+        return this.BuildExtendedRestaurantObj(restaurant);
       })
       .catch(err => {
         console.error(err);
       });
+  }
+
+  ProcessApiResult(restaurant, favoriteButton) {
+    if (restaurant == null) {
+      throw new Error("setRestaurantAsFavorite failed");
+    }
+
+    const isFavorite = this.GetFavoriteFlagValueAsBool(restaurant.is_favorite);
+    if (isFavorite) {
+      favoriteButton.UpdateAsFavorite();
+    } else {
+      favoriteButton.SetDefault();
+    }
   }
 }

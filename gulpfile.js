@@ -185,11 +185,8 @@ let jsCommonFiles = [
   "./js/db/idb-keyval.js", //Idb with promise library
   "./js/lib/debug.js",
   "./js/lib/helpers.js",
+  "./js/db/endpoints.js",
   "./js/db/cache.request.js",
-  "./js/db/cache.favorite.js",
-  "./js/handlers/set.favorite.js",
-  "./js/classes/FavoriteButton.js",
-  "./js/classes/FavoriteButtonHandler.js",
   "./js/app.js",
   "./js/lazysizes.min.js",
   "./js/gmaps/constants.js",
@@ -243,6 +240,9 @@ gulp.task("live-optim-js-index-page", callback => {
  */
 let jsFilesRestaurantPage = [
   "./js/db/fetch.restaurant.byid.js",
+  "./js/db/fetch.favorite.js",
+  "./js/classes/FavoriteButton.js",
+  "./js/classes/FavoriteButtonHandler.js",
   "./js/classes/RatingValidator.js",
   "./js/classes/AuthorValidator.js",
   "./js/classes/ReviewDescValidator.js",
@@ -251,6 +251,7 @@ let jsFilesRestaurantPage = [
   "./js/classes/ReviewSaver.js",
   "./js/classes/FormValidation.js",
   "./js/builders/slider.js",
+  "./js/handlers/set.favorite.js",
   "./js/handlers/select.rating.js",
   "./js/handlers/post.review.js",
   "./js/restaurant_info.js"
