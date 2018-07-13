@@ -11,7 +11,7 @@ function fetchRestaurant(id) {
       if (restaurant === undefined || restaurant === null) {
         var apiPromise = fetchRestaurantFromApi(id);
         return Promise.all(apiPromise).then(apiResponse => {
-          return apiPromise; //already cached in fetchRestaurantFromApi
+          return apiResponse; //already cached in fetchRestaurantFromApi
         });
       }
       fetchRestaurantFromApi(id); //call the api that will update the cache db.
@@ -42,24 +42,6 @@ function fetchRestaurantFromApi(id) {
     })
     .catch(err => {
       return "Visit the home page!";
-    });
-}
-
-function saveToApi(restaurant) {
-  const DATABASE_URL = `http://localhost:1337/restaurants/${restaurant.id}`;
-  const fetchParams = {
-    method: "POST",
-    "content-type": "application/json",
-    body: JSON.stringify(restaurant)
-  };
-  return fetch(DATABASE_URL, fetchParams)
-    .then(result => {
-      if (DEBUG) console.log("API updated data");
-      return true;
-    })
-    .catch(err => {
-      console.error("Unable to save to API. Reason: ", err);
-      return false;
     });
 }
 

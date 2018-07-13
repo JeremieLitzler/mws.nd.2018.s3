@@ -75,7 +75,13 @@ class RestaurantPage {
       this.fillRestaurantHoursHTML(this.restaurant.operating_hours);
     }
     // fill reviews
-    this.fillReviewsHTML(this.restaurant.reviews);
+    fetchReviews(this.restaurant.id)
+      .then(reviews => {
+        this.fillReviewsHTML(reviews);
+      })
+      .catch(err => {
+        console.error(err);
+      });
 
     new FavoriteButtonHandler().LoadCurrentState();
 

@@ -240,6 +240,7 @@ gulp.task("live-optim-js-index-page", callback => {
  */
 let jsFilesRestaurantPage = [
   "./js/db/fetch.restaurant.byid.js",
+  "./js/db/fetch.reviews.js",
   "./js/db/fetch.favorite.js",
   "./js/classes/FavoriteButton.js",
   "./js/classes/FavoriteButtonHandler.js",
