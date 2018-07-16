@@ -20,11 +20,11 @@ function fetchReviews(restaurantId) {
 }
 
 function updateReviewsInCacheBeforeReturning(reviews) {
-  return cacheItem(restaurant)
+  return cacheItem(reviews)
     .then(response => {
       if (DEBUG)
         console.log(`Just updated restaurant ${restaurant.id}`, response);
-      return restaurant;
+      return reviews;
     })
     .catch(err => {
       console.error(
