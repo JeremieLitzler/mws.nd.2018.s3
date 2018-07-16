@@ -140,7 +140,12 @@ class ReviewSaver {
       console.warn(
         "The review wasn't save by the API... Caching it for background sync..."
       );
-      this.SaveReviewInSpecificCacheFor(restaurant, this.reviewInstance).then();
+      this.SaveReviewInSpecificCacheFor(
+        restaurant,
+        this.BuildFinalReview(restaurant)
+      ).then(result => {
+        return fetchReviews(restaurant.id);
+      });
     }
 
     return fetchReviews(restaurant.id);
@@ -151,6 +156,6 @@ class ReviewSaver {
    * @param {Review} review
    */
   SaveReviewInSpecificCacheFor(restaurant, review) {
-    cacheReview(restaurant.id, review);
+    return cacheReview(restaurant.id, review);
   }
 }

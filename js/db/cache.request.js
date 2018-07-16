@@ -25,7 +25,7 @@ function cacheReviews(restaurantId, reviews) {
 }
 function cacheReview(restaurantId, review) {
   //read cached review to check the restaurant is present
-  retrieveKeys()
+  return retrieveKeys()
     .then(restaurantIdsWithReview => {
       return doesRestaurantHaveCachedReviews(
         restaurantIdsWithReview,
@@ -35,11 +35,11 @@ function cacheReview(restaurantId, review) {
     .then(restaurantHasCachedReview => {
       if (!restaurantHasCachedReview) {
         //if not present, add a new record with a list of 1 review.
-        return cacheReviews(restaurant, [review]);
+        return cacheReviews(restaurantId, [review]);
       }
 
       //if present, update the current list
-      return updateCachedRestaurantReviews(restaurant, review);
+      return updateCachedRestaurantReviews(restaurantId, review);
     })
     .catch(err => {
       throw new Error(`Cannot read key in reviews db => `, err);
@@ -47,10 +47,10 @@ function cacheReview(restaurantId, review) {
 }
 
 function doesRestaurantHaveCachedReviews(reviewsDbKeys, restaurantId) {
-  if (reviewsDbKeys.find(restaurantId)) {
+  const result = reviewsDbKeys.find(restaurantId => {
     return true;
-  }
-  return false;
+  });
+  return result ? result : false;
 }
 
 function updateCachedRestaurantReviews(restaurantId, review) {
