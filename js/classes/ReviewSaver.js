@@ -140,12 +140,13 @@ class ReviewSaver {
       console.warn(
         "The review wasn't save by the API... Caching it for background sync..."
       );
-      this.SaveReviewInSpecificCacheFor(
-        restaurant,
-        this.BuildFinalReview(restaurant)
-      ).then(result => {
-        return fetchReviews(restaurant.id);
-      });
+      const review = this.BuildFinalReview(restaurant);
+      return this.SaveReviewInSpecificCacheFor(restaurant, review).then(
+        result => {
+          this.RegisterReviewToSync(review);
+          return fetchReviews(restaurant.id);
+        }
+      );
     }
 
     return fetchReviews(restaurant.id);
@@ -157,5 +158,36 @@ class ReviewSaver {
    */
   SaveReviewInSpecificCacheFor(restaurant, review) {
     return cacheReview(restaurant.id, review);
+  }
+  RegisterReviewToSync(review) {
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.ready
+        .then(reg => {
+          const guid = generateGuid();
+          reg.sync
+            .register(`review-${guid}`)
+            .then(() => {
+              console.log(`Added a offline review to cache`);
+              cacheOfflineReview(guid, review)
+                .then(result => {
+                  console.log("Offline review saved in the IDB.");
+                })
+                .catch(err => {
+                  console.error(
+                    "Couldn't save the offline review in IDB => ",
+                    err
+                  );
+                });
+            })
+            .catch(err => {
+              console.error("Sync didn't register? Check why => ", err);
+            });
+        })
+        .catch(err => {
+          console.error("SW not ready? Check why => ", err);
+        });
+    } else {
+      console.error("Only Chrome 49+ supports the sync.");
+    }
   }
 }

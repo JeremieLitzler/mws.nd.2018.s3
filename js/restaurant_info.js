@@ -112,7 +112,7 @@ class RestaurantPage {
     title.innerHTML = "Reviews";
     container.appendChild(title);
     if (!reviews) {
-      return this.bindNoReviewElement();
+      return this.bindNoReviewElement(container);
     }
 
     this.bindReviewListElement(container, reviews);
@@ -133,7 +133,7 @@ class RestaurantPage {
     });
     container.appendChild(ul);
   }
-  bindNoReviewElement() {
+  bindNoReviewElement(container) {
     const noReviews = document.createElement("p");
     noReviews.innerHTML = "No reviews yet!";
     container.appendChild(noReviews);
