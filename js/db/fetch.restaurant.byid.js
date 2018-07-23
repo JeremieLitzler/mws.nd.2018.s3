@@ -11,7 +11,7 @@ function fetchRestaurant(id) {
       if (restaurant === undefined || restaurant === null) {
         var apiPromise = fetchRestaurantFromApi(id);
         return Promise.all(apiPromise).then(apiResponse => {
-          return apiPromise; //already cached in fetchRestaurantFromApi
+          return apiResponse; //already cached in fetchRestaurantFromApi
         });
       }
       fetchRestaurantFromApi(id); //call the api that will update the cache db.
@@ -27,8 +27,8 @@ function fetchRestaurant(id) {
  * @param {int} id
  */
 function fetchRestaurantFromApi(id) {
-  const DATABASE_URL = `http://localhost:1337/restaurants/${id}`;
-  fetch(DATABASE_URL)
+  const apiUrl = `${BASE_API_URL}/restaurants/${id}`;
+  fetch(apiUrl)
     .then(function(response) {
       if (response.ok) {
         const jsonData = response.json();
@@ -38,42 +38,25 @@ function fetchRestaurantFromApi(id) {
       if (DEBUG) console.log("Fetch failed response", response);
     })
     .then(restaurant => {
-      cacheItem(restaurant)
-        .then(response => {
-          if (DEBUG)
-            console.log(
-              `Just updated restaurant ID ${restaurant.id}`,
-              response
-            );
-          return restaurant;
-        })
-        .catch(err => {
-          console.error(
-            `Failed to cache the restaurant ID ${restaurant.id}in cache`,
-            err
-          );
-          return false;
-        });
+      return updateCacheBeforeReturning(restaurant);
     })
     .catch(err => {
       return "Visit the home page!";
     });
 }
 
-function saveToApi(restaurant) {
-  const DATABASE_URL = `http://localhost:1337/restaurants/${restaurant.id}`;
-  const fetchParams = {
-    method: "POST",
-    "content-type": "application/json",
-    body: JSON.stringify(restaurant)
-  };
-  return fetch(DATABASE_URL, fetchParams)
-    .then(result => {
-      if (DEBUG) console.log("API updated data");
-      return true;
+function updateCacheBeforeReturning(restaurant) {
+  return cacheItem(restaurant)
+    .then(response => {
+      if (DEBUG)
+        console.log(`Just updated restaurant ${restaurant.id}`, response);
+      return restaurant;
     })
     .catch(err => {
-      console.error("Unable to save to API. Reason: ", err);
-      return false;
+      console.error(
+        `Failed to update the restaurant  ${restaurant.id} in cache`,
+        err
+      );
+      return null;
     });
 }

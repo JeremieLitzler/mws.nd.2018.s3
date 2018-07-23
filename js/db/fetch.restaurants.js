@@ -85,29 +85,29 @@ function fetchApi2() {
         "API is not available. Falling back to the static data...",
         err
       );
-      fetchStaticDatabase();
+      //fetchStaticDatabase();
     });
 }
 /**
  * To use on remote server as long as there is no api available.
  */
-function fetchStaticDatabase() {
-  fetch(STATIC_DATA_URL)
-    .then(response => {
-      if (!response.ok) {
-        return false;
-      }
-      const jsonData = response.json();
-      //console.log(jsonData);
-      return jsonData;
-    })
-    .then(data => {
-      const restaurants = Object.values(data.restaurants);
-      cacheItems(restaurants);
-      return restaurants;
-    })
-    .catch(err => {
-      console.error("Some error appended", err);
-      return false;
-    });
-}
+// function fetchStaticDatabase() {
+//   fetch(STATIC_DATA_URL)
+//     .then(response => {
+//       if (!response.ok) {
+//         return false;
+//       }
+//       const jsonData = response.json();
+//       //console.log(jsonData);
+//       return jsonData;
+//     })
+//     .then(data => {
+//       const restaurants = Object.values(data.restaurants);
+//       cacheItems(restaurants);
+//       return restaurants;
+//     })
+//     .catch(err => {
+//       console.error("Some error appended", err);
+//       return false;
+//     });
+// }

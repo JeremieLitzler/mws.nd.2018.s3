@@ -6,30 +6,16 @@ class ReviewSaver {
     this.reviewInstance = new Review();
   }
   Save() {
+    this.InitializeSubmitFeedback();
+    this.ReadFormToFillReviewInstance();
+    this.PostToApi();
+  }
+  ReadFormToFillReviewInstance() {
     if (this.ratingElem != null) {
       this.reviewInstance.ratingValue = this.ratingElem.textContent;
     }
     this.reviewInstance.author = this.authorElem.value;
     this.reviewInstance.reviewDesc = this.reviewDescElem.value;
-
-    //this.reviewInstance.IsValid();
-    console.log(this.reviewInstance);
-
-    this.InitializeSubmitFeedback();
-    this.PostToApi()
-      .then(result => {
-        //display success message
-        if (result != null) {
-          new RestaurantPage().fillReviewsHTML(result.restaurant.reviews);
-          this.DisplaySubmissionEndNotification(result);
-          return;
-        }
-        console.log(result);
-      })
-      .catch(err => {
-        //any other error not handled
-        console.error("Check the error stack", err);
-      });
   }
   /**
    * Add a feedback paragraph to let the user know we are processing the request.
@@ -50,8 +36,8 @@ class ReviewSaver {
     const submissionFeedbackElement = document.querySelector(".submit-result");
     let feedbackMessage = `Thank you for reviewing ${result.restaurant.name}.`;
     if (!result.status) {
-      feedbackMessage +=
-        " Since you are offline, your review would be saved once you connect your device to a Wifi or mobile network.";
+      feedbackMessage = `${feedbackMessage} 
+        "Ouch, couldn't connect to the server. But do not despair: your review has been saved in your browser so once you connect your device to a Wifi or mobile network, it will be sent automatically to the server.`;
     }
     if (submissionFeedbackElement != null) {
       submissionFeedbackElement.textContent = feedbackMessage;
@@ -62,30 +48,52 @@ class ReviewSaver {
    */
   PostToApi() {
     const restaurantId = new RestaurantPage().getRestaurantId();
-    return fetchRestaurant(restaurantId).then(restaurant => {
-      this.AddReviewToRestaurantObj(restaurant);
-      return this.ProcessApiResponse(restaurant);
-    });
-  }
-  AddReviewToRestaurantObj(restaurant) {
-    if (restaurant.reviews == null || restaurant.reviews == undefined) {
-      console.warn(
-        `Restaurant ${restaurant.id} has no reviews... Initializing the list...`
-      );
-      restaurant.reviews = [];
-    }
-    const finalReviewObject = this.BuildFinalReview();
-    restaurant.reviews.push(finalReviewObject);
+    return fetchRestaurant(restaurantId)
+      .then(restaurant => {
+        const newReview = this.BuildFinalReview(restaurant);
+        return this.ProcessApiResponse(restaurant, newReview);
+      })
+      .then(finalResponse => {
+        //display success message
+        if (finalResponse == null) {
+          throw new Error("Final response cannot be null");
+        }
+        if (finalResponse.status == undefined || finalResponse.status == null) {
+          throw new Error(
+            "Final response must contains a status. Expected: true or false"
+          );
+        }
+
+        if (
+          finalResponse.reviews == null ||
+          finalResponse.reviews == undefined
+        ) {
+          throw new Error(
+            "There must always be at least one review at this point!"
+          );
+        }
+
+        const reviewContainer = new RestaurantPage().readReviewsContainer();
+        new RestaurantPage().bindReviewListElement(
+          reviewContainer,
+          finalResponse.reviews
+        );
+        this.DisplaySubmissionEndNotification(finalResponse);
+      })
+      .catch(err => {
+        //any other error not handled
+        console.error("Check the error stack", err);
+      });
   }
   /**
    *
    */
-  BuildFinalReview() {
+  BuildFinalReview(restaurant) {
     return {
       name: this.reviewInstance.author,
       rating: this.reviewInstance.ratingValue,
       comments: this.reviewInstance.reviewDesc,
-      date: new Date(Date.now()).toDateString()
+      restaurant_id: restaurant.id
     };
   }
   /**
@@ -94,14 +102,31 @@ class ReviewSaver {
    * True means we can tell that the user that the review was saved.
    * False means we will save the review using background sync.
    * @param {restaurant} restaurant
+   * @param {review} newReview
    */
-  ProcessApiResponse(restaurant) {
-    return saveToApi(restaurant)
+  ProcessApiResponse(restaurant, newReview) {
+    return saveNewReview(newReview)
       .then(apiResult => {
-        return this.BuildResponseObject(apiResult, restaurant);
+        return this.BuildResponseObject(apiResult, restaurant)
+          .then(reviews => {
+            return {
+              status: apiResult.status,
+              restaurant: restaurant,
+              reviews: reviews
+            };
+          })
+          .catch(err => {
+            console.error(
+              "Unhandled error after BuildResponseObject. Check call stack",
+              err
+            );
+          });
       })
       .catch(err => {
-        console.error("Unhandled error. Check call stack", err);
+        console.error(
+          "Unhandled error after saveNewReview. Check call stack",
+          err
+        );
       });
   }
 
@@ -111,22 +136,58 @@ class ReviewSaver {
    * @param {restaurant} restaurant
    */
   BuildResponseObject(apiResult, restaurant) {
-    if (!apiResult) {
+    if (!apiResult.status) {
       console.warn(
         "The review wasn't save by the API... Caching it for background sync..."
       );
-      this.SaveReviewInSpecificCacheFor(restaurant);
+      const review = this.BuildFinalReview(restaurant);
+      return this.SaveReviewInSpecificCacheFor(restaurant, review).then(
+        result => {
+          this.RegisterReviewToSync(review);
+          return fetchReviews(restaurant.id);
+        }
+      );
     }
-    return {
-      status: apiResult,
-      restaurant: restaurant
-    };
+
+    return fetchReviews(restaurant.id);
   }
   /**
    * Cache the review for a given restaurant
    * @param {Restaurant} restaurant
+   * @param {Review} review
    */
-  SaveReviewInSpecificCacheFor(restaurant) {
-    cacheReview(restaurant, this.reviewInstance);
+  SaveReviewInSpecificCacheFor(restaurant, review) {
+    return cacheReview(restaurant.id, review);
+  }
+  RegisterReviewToSync(review) {
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.ready
+        .then(reg => {
+          const guid = generateGuid();
+          reg.sync
+            .register(`review-${guid}`)
+            .then(() => {
+              console.log(`Added a offline review to cache`);
+              cacheOfflineReview(guid, review)
+                .then(result => {
+                  console.log("Offline review saved in the IDB.");
+                })
+                .catch(err => {
+                  console.error(
+                    "Couldn't save the offline review in IDB => ",
+                    err
+                  );
+                });
+            })
+            .catch(err => {
+              console.error("Sync didn't register? Check why => ", err);
+            });
+        })
+        .catch(err => {
+          console.error("SW not ready? Check why => ", err);
+        });
+    } else {
+      console.error("Only Chrome 49+ supports the sync.");
+    }
   }
 }

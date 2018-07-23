@@ -178,6 +178,46 @@ gulp.task("critical-css", ["optim-css"], function() {
  *     - minifying the javascript code.
  */
 let uglify = require("gulp-uglify-es").default;
+
+/**
+ * Background sync files
+ */
+let swJsFiles = [
+  "./js/lib/debug.js",
+  "./js/db/endpoints.js",
+  "./js/db/idb-keyval.js", //Idb with promise library
+  "./js/db/cache.request.js",
+  "./js/db/fetch.reviews.js"
+];
+gulp.task("optim-js-sw", callback => {
+  pump(
+    [
+      gulp.src(swJsFiles),
+      sourcemaps.init(),
+      babel(),
+      concat("bgSync.js"),
+      uglify(),
+      rename("bgSync.min.js"),
+      sourcemaps.write(),
+      gulp.dest("build/js")
+    ],
+    callback
+  );
+});
+gulp.task("live-optim-js-sw", callback => {
+  pump(
+    [
+      gulp.src(swJsFiles),
+      babel(),
+      concat("bgSync.js"),
+      uglify(),
+      rename("bgSync.min.js"),
+      gulp.dest("build/js")
+    ],
+    callback
+  );
+});
+
 /**
  * jsCommonFiles is the list of javascript files that are common to both index and restaurant pages.
  */
@@ -185,11 +225,8 @@ let jsCommonFiles = [
   "./js/db/idb-keyval.js", //Idb with promise library
   "./js/lib/debug.js",
   "./js/lib/helpers.js",
+  "./js/db/endpoints.js",
   "./js/db/cache.request.js",
-  "./js/db/cache.favorite.js",
-  "./js/handlers/set.favorite.js",
-  "./js/classes/FavoriteButton.js",
-  "./js/classes/FavoriteButtonHandler.js",
   "./js/app.js",
   "./js/lazysizes.min.js",
   "./js/gmaps/constants.js",
@@ -243,6 +280,10 @@ gulp.task("live-optim-js-index-page", callback => {
  */
 let jsFilesRestaurantPage = [
   "./js/db/fetch.restaurant.byid.js",
+  "./js/db/fetch.reviews.js",
+  "./js/db/fetch.favorite.js",
+  "./js/classes/FavoriteButton.js",
+  "./js/classes/FavoriteButtonHandler.js",
   "./js/classes/RatingValidator.js",
   "./js/classes/AuthorValidator.js",
   "./js/classes/ReviewDescValidator.js",
@@ -251,6 +292,7 @@ let jsFilesRestaurantPage = [
   "./js/classes/ReviewSaver.js",
   "./js/classes/FormValidation.js",
   "./js/builders/slider.js",
+  "./js/handlers/set.favorite.js",
   "./js/handlers/select.rating.js",
   "./js/handlers/post.review.js",
   "./js/restaurant_info.js"
@@ -325,12 +367,14 @@ gulp.task("copy-scripts", () => {
 gulp.task("scripts", [
   "optim-js-index-page",
   "optim-js-restaurant-page",
-  "optim-js-io"
+  "optim-js-io",
+  "optim-js-sw"
 ]);
 gulp.task("live-scripts", [
   "live-optim-js-index-page",
   "live-optim-js-restaurant-page",
-  "optim-js-io"
+  "optim-js-io",
+  "live-optim-js-sw"
 ]);
 /**
  * Default gulp task for development environnement that includes:

@@ -23,7 +23,7 @@ workbox.setConfig({ debug: isDebuggingActive });
 // https://developers.google.com/web/tools/workbox/guides/configure-workbox
 workbox.core.setCacheNameDetails({
   prefix: "rr",
-  suffix: "v7"
+  suffix: "v4"
 });
 /**
  * See: https://developers.google.com/web/tools/workbox/modules/workbox-sw#skip_waiting_and_clients_claim
@@ -137,3 +137,66 @@ workbox.routing.registerRoute(
     cacheableResponse: { statuses: [0, 200] }
   })
 );
+
+importScripts("./js/bgSync.min.js");
+self.addEventListener("sync", event => {
+  console.log("Sync is working... Just do stuff now!");
+  if (event.tag.startsWith("review")) {
+    console.log("Sync is working... Process event!");
+    event.waitUntil(ProcessUnsavedReview(event.tag));
+  } else {
+  }
+});
+
+function ProcessUnsavedReview(reviewKey) {
+  getOfflineReview(reviewKey)
+    .then(offlineReview => {
+      if (offlineReview == null || offlineReview == undefined) {
+        throw new Error("No review found!");
+      }
+      return ResendReview(offlineReview);
+    })
+    .then(syncResult => {
+      if (!syncResult.status) {
+        console.error(new Error("API still not available..."));
+        broadcast({ action: "api-unavailable" }, syncResult.review);
+        return;
+      }
+
+      console.log("Sync is ok... Proceed!");
+      removeOfflineReview(reviewKey)
+        .then(result => {
+          if (result) {
+            broadcast({ action: "review-saved" }, syncResult.review);
+          } else {
+            broadcast({ action: "review-not-deleted" }, syncResult.review);
+          }
+        })
+        .catch(err => {
+          console.error("Impossible to remove cached offline review => ", err);
+        });
+    })
+    .catch(err => {
+      console.error("Failed to process sync event => ", err);
+    });
+}
+
+function ResendReview(review) {
+  console.log("Let's resend the review the API...");
+  return saveNewReview(review)
+    .then(apiResult => {
+      return { status: apiResult.status, review: review };
+    })
+    .catch(err => {
+      console.error("Failed to resend to the review from sw => ", err);
+      return { status: false, review: undefined };
+    });
+}
+
+function broadcast(message) {
+  clients.matchAll().then(clients => {
+    for (const client of clients) {
+      client.postMessage(message);
+    }
+  });
+}

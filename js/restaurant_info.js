@@ -75,7 +75,13 @@ class RestaurantPage {
       this.fillRestaurantHoursHTML(this.restaurant.operating_hours);
     }
     // fill reviews
-    this.fillReviewsHTML(this.restaurant.reviews);
+    fetchReviews(this.restaurant.id)
+      .then(reviews => {
+        this.fillReviewsHTML(reviews);
+      })
+      .catch(err => {
+        console.error(err);
+      });
 
     new FavoriteButtonHandler().LoadCurrentState();
 
@@ -101,21 +107,36 @@ class RestaurantPage {
    * Create all reviews HTML and add them to the webpage.
    */
   fillReviewsHTML(reviews) {
-    const container = document.getElementById("reviews-container");
+    const container = this.readReviewsContainer();
     const title = document.createElement("h3");
     title.innerHTML = "Reviews";
     container.appendChild(title);
     if (!reviews) {
-      const noReviews = document.createElement("p");
-      noReviews.innerHTML = "No reviews yet!";
-      container.appendChild(noReviews);
-      return;
+      return this.bindNoReviewElement(container);
     }
+
+    this.bindReviewListElement(container, reviews);
+  }
+  readReviewsContainer() {
+    return document.getElementById("reviews-container");
+  }
+  /**
+   *
+   * @param {DOMElement} container the element in which the list is container
+   * @param {Reviews[]} reviews The list of reviews
+   */
+  bindReviewListElement(container, reviews) {
     const ul = document.getElementById("reviews-list");
+    ul.innerHTML = "";
     reviews.forEach(review => {
       ul.appendChild(this.createReviewHTML(review));
     });
     container.appendChild(ul);
+  }
+  bindNoReviewElement(container) {
+    const noReviews = document.createElement("p");
+    noReviews.innerHTML = "No reviews yet!";
+    container.appendChild(noReviews);
   }
   /**
    * Create review HTML and add it to the webpage.
